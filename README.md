@@ -49,8 +49,8 @@ example.com {
   file_server
 
   @path {
-		path /api/* /ws
-	}
+    path /api/* /ws
+  }
 
   reverse_proxy @path localhost:8008
 }
