@@ -33,7 +33,7 @@
 
 本项目为纯前端，不依赖哪吒服务端渲染，所以需要一个新的站点
 
-下载 [Release](/releases) 到服务器对应目录并解压，然后配置好 `Nginx` 或 `Caddy` 即可
+下载 [Release](https://github.com/reg233/nezha-theme-world-map/releases/latest) 到服务器对应目录并解压，然后配置好 `Nginx` 或 `Caddy` 即可
 
 ### Nginx
 
