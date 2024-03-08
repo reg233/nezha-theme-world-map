@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>监控室</title>
+    <style>
+      :root {
+        --primary-color: #007fff;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body,
+      #root,
+      .loader-container {
+        height: 100%;
+        width: 100%;
+      }
+
+      body {
+        margin: 0;
+      }
+
+      .loader-container {
+        align-items: center;
+        display: flex;
+        justify-content: center;
+      }
+
+      .loader {
+        animation: rotation 1s linear infinite;
+        border: 4px solid var(--primary-color);
+        border-bottom-color: transparent;
+        border-radius: 50%;
+        display: inline-block;
+        height: 48px;
+        width: 48px;
+      }
+
+      @keyframes rotation {
+        0% {
+          transform: rotate(0deg);
+        }
+
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root">
+      <div class="loader-container">
+        <div class="loader"></div>
+      </div>
+    </div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
