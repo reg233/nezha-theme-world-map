@@ -18,7 +18,7 @@
 
 ![Mobile 2](/screenshots/mobile_2.jpg)
 
-[在线体验](https://jk.000.pe)
+[在线体验](https://jks.422000.xyz)
 
 ## 主要改动
 
