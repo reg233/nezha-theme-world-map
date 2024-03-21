@@ -1,3 +1,5 @@
+import dayjs from "dayjs";
+
 export const transformServer = (now, server) => {
   let {
     Host: {
@@ -44,7 +46,7 @@ export const transformServer = (now, server) => {
   virtualization = virtualization && `${virtualization}:`;
 
   return {
-    bootTime: new Date(bootTime * 1000).toLocaleString(),
+    bootTime: dayjs.unix(bootTime).format("YYYY-MM-DD HH:mm:ss"),
     connectionCount: `TCP ${tcpCount} / UDP ${udpCount}`,
     countryCode,
     cpu,
@@ -54,7 +56,7 @@ export const transformServer = (now, server) => {
     diskTotal: formatBytes(diskTotal),
     diskUsed: formatBytes(diskUsed),
     id,
-    lastActive: new Date(lastActive).toLocaleString(),
+    lastActive: dayjs(lastActive).format("YYYY-MM-DD HH:mm:ss"),
     live,
     load: `${load1.toFixed(2)} / ${load5.toFixed(2)} / ${load15.toFixed(2)}`,
     memoryPercent: getPercent(memoryUsed, memoryTotal),
