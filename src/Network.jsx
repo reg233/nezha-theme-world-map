@@ -84,11 +84,19 @@ const Network = forwardRef(function Network(_, ref) {
 
           series.push({
             data: seriesData,
+            lineStyle: {
+              width: 1,
+            },
             markPoint: {
               data: [
                 { name: "Max", type: "max" },
                 { name: "Min", type: "min" },
               ],
+              label: {
+                fontSize: 10,
+                offset: [0, -1],
+              },
+              symbolSize: 40,
             },
             name: legendName,
             smooth: true,
@@ -108,6 +116,10 @@ const Network = forwardRef(function Network(_, ref) {
           ],
           legend: {
             data: legendData,
+            pageButtonItemGap: 0,
+            pageButtonGap: 8,
+            pageIconSize: 12,
+            type: "scroll",
           },
           series,
           xAxis: {
@@ -115,6 +127,9 @@ const Network = forwardRef(function Network(_, ref) {
             type: "time",
           },
           yAxis: {
+            axisLabel: {
+              formatter: (value) => value,
+            },
             boundaryGap: false,
             type: "value",
           },

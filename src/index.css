@@ -19,12 +19,10 @@ body::before {
   border-radius: 8px;
   box-shadow: 0 1px 2px 0 rgba(34, 36, 38, 0.15),
     0 0 0 1px rgba(34, 36, 38, 0.15);
-  margin-bottom: 16px;
 }
 
 .ant-collapse-borderless > .ant-collapse-item:last-child {
   border-radius: 8px;
-  margin-bottom: 0;
 }
 
 .ant-collapse-borderless
@@ -61,6 +59,49 @@ body::before {
   fill: none;
   stroke: white;
   stroke-width: 0.5px;
+}
+
+.ant-tabs {
+  background-color: rgba(235, 235, 235, 0.4);
+  border-radius: 8px;
+  box-shadow: 0 1px 2px 0 rgba(34, 36, 38, 0.15),
+    0 0 0 1px rgba(34, 36, 38, 0.15);
+}
+
+.ant-tabs-nav-sticky {
+  position: sticky;
+  top: -1px;
+  z-index: 1;
+  transition: all 0.3s;
+}
+
+.ant-tabs-nav-sticky.stickied {
+  background-color: white;
+  box-shadow: 0 6px 16px 0 rgba(0, 0, 0, 0.08),
+    0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 9px 28px 8px rgba(0, 0, 0, 0.05);
+}
+
+.ant-tabs-top > div > .ant-tabs-nav {
+  margin: 0;
+}
+
+.ant-tabs-top > div > .ant-tabs-nav::before {
+  border-bottom: none;
+}
+
+.ant-tabs .ant-tabs-tab {
+  padding: 12px 16px;
+}
+
+.ant-tabs
+  > div
+  > .ant-tabs-nav
+  .ant-tabs-nav-wrap:not([class*="ant-tabs-nav-wrap-ping"]) {
+  justify-content: center;
+}
+
+.ant-tabs-content-holder {
+  padding: 16px;
 }
 
 .card {
@@ -154,11 +195,19 @@ body::before {
   .ant-collapse {
     padding: 16px;
   }
+
+  .tabs {
+    padding: 0 16px 16px;
+  }
 }
 
 @media only screen and (min-width: 768px) {
   .ant-collapse {
-    padding: 4% 8%;
+    padding: 4% 8% 16px;
+  }
+
+  .tabs {
+    padding: 0 8% 4%;
   }
 }
 

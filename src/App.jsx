@@ -10,6 +10,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Card } from "./Card";
 import { MemoizedCopyright } from "./Copyright";
 import { MemoizedNetwork } from "./Network";
+import { Tab } from "./Tab";
 import { WorldMap } from "./WorldMap";
 import { transformServer } from "./utils";
 
@@ -18,7 +19,6 @@ export const App = () => {
     getCountries();
   }, []);
 
-  const [inactiveKey, setInactiveKey] = useState([]);
   const [countries, setCountries] = useState({});
 
   const copyrightRef = useRef();
@@ -46,10 +46,9 @@ export const App = () => {
     }
   );
 
-  const [tags, items] = useMemo(() => {
+  const [items, tabsItems] = useMemo(() => {
     const { now = 0, servers = [] } = JSON.parse(data);
 
-    const tags = ["WorldMap"];
     const groupedServers = new Map();
     const checkedCountries = new Set();
     for (const server of servers) {
@@ -59,7 +58,6 @@ export const App = () => {
       if (groupedServers.has(key)) {
         groupedServers.get(key).push(newServer);
       } else {
-        tags.push(key);
         groupedServers.set(key, [newServer]);
       }
 
@@ -80,42 +78,41 @@ export const App = () => {
         key: "WorldMap",
         label: "世界地图",
       },
-      ...Array.from(groupedServers, ([tag, servers]) => ({
-        children: (
-          <Flex gap={16} justify="center" wrap="wrap">
-            {servers.map((server) => (
-              <Card
-                country={
-                  countries[server.countryCode] || { flag: "🏴‍☠️", zh: "" }
-                }
-                data={server}
-                key={server.id}
-                networkRef={networkRef}
-              />
-            ))}
-          </Flex>
-        ),
-        key: tag,
-        label: tag,
-      })),
     ];
 
-    return [tags, items];
+    const tabsItems = Array.from(groupedServers, ([tag, servers]) => ({
+      children: (
+        <Flex gap={16} justify="center" wrap="wrap">
+          {servers.map((server) => (
+            <Card
+              country={countries[server.countryCode] || { flag: "🏴‍☠️", zh: "" }}
+              data={server}
+              key={server.id}
+              networkRef={networkRef}
+            />
+          ))}
+        </Flex>
+      ),
+      key: tag,
+      label: tag,
+    }));
+
+    return [items, tabsItems];
   }, [data, countries, zhCountries]);
 
   return (
     <>
       <Collapse
-        activeKey={tags.filter((tag) => !inactiveKey.includes(tag))}
         bordered={false}
+        defaultActiveKey="WorldMap"
         expandIcon={({ isActive }) => (
           <CaretRightOutlined rotate={isActive ? 90 : 0} />
         )}
         items={items}
-        onChange={(activeKey) => {
-          setInactiveKey(tags.filter((tag) => !activeKey.includes(tag)));
-        }}
       />
+      <div className="tabs">
+        {!!tabsItems.length && <Tab items={tabsItems} />}
+      </div>
       <FloatButton
         icon={
           readyState === ReadyState.Connecting ? (
