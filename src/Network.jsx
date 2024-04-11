@@ -6,6 +6,7 @@ import {
   DataZoomComponent,
   GridComponent,
   LegendComponent,
+  MarkLineComponent,
   MarkPointComponent,
   TooltipComponent,
 } from "echarts/components";
@@ -18,6 +19,7 @@ echarts.use([
   DataZoomComponent,
   GridComponent,
   LegendComponent,
+  MarkLineComponent,
   MarkPointComponent,
   TooltipComponent,
   CanvasRenderer,
@@ -65,14 +67,15 @@ const Network = forwardRef(function Network(_, ref) {
         for (const monitor of result) {
           let loss = 0;
           let seriesData = [];
+          let markLineData = [];
 
           for (let i = 0; i < monitor.created_at.length; i++) {
             const avgDelay = Math.round(monitor.avg_delay[i]);
-            if (avgDelay > 1000 * 0.9) {
-              loss += 1;
-            }
-            if (avgDelay > 0) {
+            if (avgDelay > 0 && avgDelay < 1000) {
               seriesData.push([monitor.created_at[i], avgDelay]);
+            } else {
+              loss += 1;
+              markLineData.push({ xAxis: monitor.created_at[i] });
             }
           }
 
@@ -84,18 +87,25 @@ const Network = forwardRef(function Network(_, ref) {
 
           series.push({
             data: seriesData,
-            lineStyle: {
-              width: 1,
+            lineStyle: { width: 1 },
+            markLine: {
+              data: markLineData,
+              label: { show: false },
+              lineStyle: { opacity: 0.5, width: 0.5 },
+              silent: true,
+              symbol: "none",
             },
             markPoint: {
               data: [
                 { name: "Max", type: "max" },
-                { name: "Min", type: "min" },
+                {
+                  label: { offset: [0, 8] },
+                  name: "Min",
+                  symbolRotate: 180,
+                  type: "min",
+                },
               ],
-              label: {
-                fontSize: 10,
-                offset: [0, -1],
-              },
+              label: { fontSize: 10, offset: [0, -1] },
               symbolSize: 40,
             },
             name: legendName,
