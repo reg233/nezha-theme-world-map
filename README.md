@@ -8,19 +8,39 @@
 
 #### 桌面端
 
-![Desktop 1](/screenshots/desktop_1.png)
+![Desktop-1-1](/screenshots/desktop-1-1.png)
 
-![Desktop 2](/screenshots/desktop_2.png)
+![Desktop-1-2](/screenshots/desktop-1-2.png)
 
-![Desktop 3](/screenshots/desktop_3.png)
+![Desktop-1-3](/screenshots/desktop-1-3.png)
 
 #### 移动端
 
-![Mobile 1](/screenshots/mobile_1.jpg)
-
-![Mobile 2](/screenshots/mobile_2.jpg)
+<p>
+  <img alt="Mobile-1-1" src="/screenshots/mobile-1-1.jpg" width="49%" />
+  <img alt="Mobile-1-2" src="/screenshots/mobile-1-2.jpg" width="49%" />
+</p>
 
 [演示](https://jks.422000.xyz)
+
+### 样式二
+
+#### 桌面端
+
+![Desktop-2-1](/screenshots/desktop-2-1.png)
+
+![Desktop-2-2](/screenshots/desktop-2-2.png)
+
+![Desktop-2-3](/screenshots/desktop-2-3.png)
+
+#### 移动端
+
+<p>
+  <img alt="Mobile-2-1" src="/screenshots/mobile-2-1.jpg" width="49%" />
+  <img alt="Mobile-2-2" src="/screenshots/mobile-2-2.jpg" width="49%" />
+</p>
+
+[演示](https://jks-tabs.422000.xyz)
 
 ## 主要改动
 
