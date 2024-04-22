@@ -50,7 +50,7 @@ export const App = () => {
     const { now = 0, servers = [] } = JSON.parse(data);
 
     const groupedServers = new Map();
-    const checkedCountries = new Set();
+    const checkedCountries = new Map();
     for (const server of servers) {
       const newServer = transformServer(now, server);
 
@@ -63,7 +63,12 @@ export const App = () => {
 
       const country = countries[newServer.countryCode];
       if (country) {
-        checkedCountries.add(country.en);
+        const count = checkedCountries.get(country.en);
+        if (count) {
+          checkedCountries.set(country.en, count + 1)
+        } else {
+          checkedCountries.set(country.en, 1);
+        }
       }
     }
 
