@@ -4,7 +4,9 @@
 
 ## 效果图
 
-### 桌面端
+### 样式一
+
+#### 桌面端
 
 ![Desktop 1](/screenshots/desktop_1.png)
 
@@ -12,20 +14,19 @@
 
 ![Desktop 3](/screenshots/desktop_3.png)
 
-### 移动端
+#### 移动端
 
 ![Mobile 1](/screenshots/mobile_1.jpg)
 
 ![Mobile 2](/screenshots/mobile_2.jpg)
 
-[在线体验](https://jks.422000.xyz)
+[演示](https://jks.422000.xyz)
 
 ## 主要改动
 
 - 增加世界地图
 - 默认背景图为必应每日壁纸
 - 旗帜使用 emoji 显示，不同系统质感不同，Windows 只会显示对应 code
-- 增加国家或地区中文提示
 - 小鸡的主要信息以标签组形式显示
 - 小鸡离线时卡片会加上灰色滤镜
 - 增加网络图表
@@ -34,11 +35,17 @@
 
 本项目为纯前端，不依赖哪吒服务端渲染，所以需要一个新的站点
 
-下载 [Release](https://github.com/reg233/nezha-theme-world-map/releases/latest) 到服务器对应目录并解压，然后配置好 `Nginx` 或 `Caddy` ，只需反代路径 `/api/*` 和 `/ws` 到哪吒面板地址
+下载 [Release](https://github.com/reg233/nezha-theme-world-map/releases/latest) 到站点的对应目录并解压
+
+样式一：nezha-theme-world-map.zip
+
+样式二：nezha-theme-world-map-tabs.zip
+
+在 `Nginx` 或 `Caddy` 的配置文件中反代路径 `/api/*` 和 `/ws` 到哪吒面板地址
 
 ### Nginx
 
-不会 Nginx，会的大佬请帮帮我，感谢
+暂无
 
 ### Caddy
 
@@ -58,9 +65,9 @@ example.com {
 
 ## 已知问题
 
-小鸡数量超过 100 时页面会开始出现明显卡顿，如有大佬有解决方案，请帮帮我，万分感激。若无后续会增加不卡顿的 Tab 样式
+小鸡数量超过 100 时样式一会出现明显卡顿，建议使用样式二。
 
-台湾旗帜 emoji 在 MacOS 下无法显示
+中国台湾旗帜 emoji 在 MacOS 下无法显示
 
 ## 声明
 

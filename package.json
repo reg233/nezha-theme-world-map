@@ -1,7 +1,7 @@
 {
   "name": "nezha-theme-world-map",
   "private": true,
-  "version": "1.2.1",
+  "version": "1.2.2",
   "type": "module",
   "scripts": {
     "dev": "vite --host",
@@ -13,7 +13,10 @@
     "@ant-design/icons": "^5.3.1",
     "ahooks": "^3.7.10",
     "antd": "^5.15.1",
+    "d3-array": "^3.2.4",
     "d3-geo": "^3.1.0",
+    "d3-interpolate": "^3.0.1",
+    "d3-scale": "^4.0.2",
     "dayjs": "^1.11.10",
     "echarts": "^5.5.0",
     "echarts-for-react": "^3.0.2",

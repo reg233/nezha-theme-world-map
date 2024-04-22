@@ -1,5 +1,5 @@
 body::before {
-  background: url("https://bing.img.run/1920x1080.php") center / cover no-repeat;
+  background: url("https://imgapi.cn/bing.php") center / cover no-repeat;
   bottom: 0;
   content: "";
   left: 0;
@@ -51,10 +51,6 @@ body::before {
 .world-map-country:hover,
 .world-map-country-checked:hover {
   fill: #ff2400;
-}
-
-.world-map-country-checked {
-  fill: var(--primary-color);
 }
 
 .world-map-interior {
