@@ -23,7 +23,9 @@ export const Card = memo(
       <div className={`card${data.live ? "" : " card-offline"}`}>
         <Row align="middle" wrap={false}>
           <Col className="name" flex={1}>
-            <Tooltip title={country.zh}>{country.flag}</Tooltip>
+            <Tooltip title={country.zh}>
+              <span className={`fi fi-${data.countryCode || "xx"}`}></span>
+            </Tooltip>
             &nbsp;
             {data.name}
           </Col>

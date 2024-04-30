@@ -120,6 +120,10 @@ body::before {
   color: rgba(0, 0, 0, 0.88);
 }
 
+.fi {
+  border-radius: 4px;
+}
+
 .name {
   font-size: 16px;
   font-weight: 500;

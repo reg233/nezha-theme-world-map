@@ -17,11 +17,20 @@ export const WorldMap = memo(
     }, []);
 
     const getTopoJSON = async () => {
+      const localCountries = localStorage.getItem("countries-50m");
+      if (localCountries) {
+        const json = JSON.parse(localCountries);
+        setFeatures(feature(json, json.objects.countries).features);
+        setInteriors(mesh(json, json.objects.countries, (a, b) => a !== b));
+      }
+
       const response = await fetch("/countries-50m.json");
       if (response.status === 200) {
         const json = await response.json();
         setFeatures(feature(json, json.objects.countries).features);
         setInteriors(mesh(json, json.objects.countries, (a, b) => a !== b));
+
+        localStorage.setItem("countries-50m", JSON.stringify(json));
       }
     };
 
