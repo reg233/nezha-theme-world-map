@@ -25,10 +25,17 @@ export const App = () => {
   const networkRef = useRef();
 
   const getCountries = async () => {
+    const localCountries = localStorage.getItem("countries");
+    if (localCountries) {
+      setCountries(JSON.parse(localCountries));
+    }
+
     const response = await fetch("/countries.json");
     if (response.status === 200) {
       const json = await response.json();
       setCountries(json);
+
+      localStorage.setItem("countries", JSON.stringify(json));
     }
   };
 
@@ -39,7 +46,7 @@ export const App = () => {
     }, {});
   }, [countries]);
 
-  const { latestMessage: { data = "{}" } = {}, readyState } = useWebSocket(
+  const { latestMessage: { data } = {}, readyState } = useWebSocket(
     getSocketUrl(),
     {
       reconnectLimit: Infinity,
@@ -47,7 +54,14 @@ export const App = () => {
   );
 
   const [tags, items] = useMemo(() => {
-    const { now = 0, servers = [] } = JSON.parse(data);
+    let newData;
+    if (data) {
+      localStorage.setItem("data", data);
+      newData = data;
+    } else {
+      newData = localStorage.getItem("data") || "{}";
+    }
+    const { now = 0, servers = [] } = JSON.parse(newData);
 
     const tags = ["WorldMap"];
     const groupedServers = new Map();
@@ -67,7 +81,7 @@ export const App = () => {
       if (country) {
         const count = checkedCountries.get(country.en);
         if (count) {
-          checkedCountries.set(country.en, count + 1)
+          checkedCountries.set(country.en, count + 1);
         } else {
           checkedCountries.set(country.en, 1);
         }
@@ -90,9 +104,7 @@ export const App = () => {
           <Flex gap={16} justify="center" wrap="wrap">
             {servers.map((server) => (
               <Card
-                country={
-                  countries[server.countryCode] || { flag: "🏴‍☠️", zh: "" }
-                }
+                country={countries[server.countryCode] || { en: "", zh: "" }}
                 data={server}
                 key={server.id}
                 networkRef={networkRef}
