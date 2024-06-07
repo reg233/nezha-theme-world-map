@@ -83,6 +83,32 @@ example.com {
 }
 ```
 
+## 自定义
+
+### 修改标题
+
+在 `index.html` 中搜索 `监控室` 并替换
+
+### 修改背景图
+
+在 `assets/index-xxxxxxxx.css` 中搜索 `https://imgapi.cn/bing.php` 并替换
+
+### 隐藏地图
+
+在 `assets/index-xxxxxxxx.css` 底部加入以下内容
+
+#### 样式一
+
+```css
+.ant-collapse-item:first-child{display:none}
+```
+
+#### 样式二
+
+```css
+.ant-collapse{display:none}@media only screen and (max-width:767px){.tabs{padding:16px}}@media only screen and (min-width:768px){.tabs{padding:4% 8%}}
+```
+
 ## 已知问题
 
 小鸡数量超过 100 时样式一会出现明显卡顿，建议使用样式二
