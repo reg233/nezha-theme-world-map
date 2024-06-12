@@ -98,7 +98,7 @@ example.com {
   reverse_proxy @path https://foobar.com {
     header_up Host {upstream_hostport}
     header_up -Origin
-	}
+  }
 }
 ```
 
