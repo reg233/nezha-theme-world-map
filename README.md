@@ -21,7 +21,7 @@
   <img alt="Mobile-1-2" src="/screenshots/mobile-1-2.jpg" width="49%" />
 </p>
 
-[演示](https://jks.422000.xyz)
+[演示](https://jks-collapse.pages.dev)
 
 ### 样式二
 
@@ -40,7 +40,7 @@
   <img alt="Mobile-2-2" src="/screenshots/mobile-2-2.jpg" width="49%" />
 </p>
 
-[演示](https://jks-tabs.422000.xyz)
+[演示](https://jks-tabs.pages.dev)
 
 ## 主要改动
 
@@ -49,25 +49,25 @@
 - 小鸡的主要信息以标签组形式显示
 - 小鸡离线时卡片为灰色
 - 增加网络图表
-- 支持PWA，可安装到桌面或主屏幕
+- 支持 PWA，可安装到桌面或主屏幕
 
 ## 部署
 
 本项目为纯前端，不依赖哪吒服务端渲染，所以需要一个新的站点
 
-下载 [Release](https://github.com/reg233/nezha-theme-world-map/releases/latest) 到站点的对应目录并解压
+### 手动
 
-样式一：nezha-theme-world-map.zip
-
-样式二：nezha-theme-world-map-tabs.zip
+下载 [样式一](https://github.com/reg233/nezha-theme-world-map/releases/latest/download/nezha-theme-world-map.zip) 或 [样式二](https://github.com/reg233/nezha-theme-world-map/releases/latest/download/nezha-theme-world-map-tabs.zip) 到站点的对应目录并解压
 
 在 `Nginx` 或 `Caddy` 的配置文件中反代路径 `/api/*` 和 `/ws` 到哪吒面板地址
 
-### Nginx
+#### Nginx
 
 暂无
 
-### Caddy
+#### Caddy
+
+反代本地
 
 ```
 example.com {
@@ -82,6 +82,91 @@ example.com {
   reverse_proxy @path localhost:8008
 }
 ```
+
+反代远程
+
+```
+example.com {
+  root * /var/www/nezha-theme-world-map
+  encode zstd gzip
+  file_server
+
+  @path {
+    path /api/* /ws
+  }
+
+  reverse_proxy @path https://foobar.com {
+	  header_up Host {upstream_hostport}
+		header_up -Origin
+	}
+}
+```
+
+### Cloudflare Pages
+
+下载 [样式一](https://github.com/reg233/nezha-theme-world-map/releases/latest/download/nezha-theme-world-map.zip) 或 [样式二](https://github.com/reg233/nezha-theme-world-map/releases/latest/download/nezha-theme-world-map-tabs.zip) 到本地并解压
+
+在 `index.html` 旁边创建一个名为 `_worker.js` 的文件，将下面的代码粘贴进去，再修改第 1 行中的域名
+
+<details>
+
+<summary>_worker.js</summary>
+
+```js
+const domain = "example.com";
+
+export default {
+  async fetch(request, env) {
+    const url = new URL(request.url);
+    if (url.pathname.startsWith("/api/")) {
+      return handleRequest(request);
+    } else if (url.pathname.startsWith("/ws")) {
+      return handleWebSocket(request);
+    }
+
+    return env.ASSETS.fetch(request);
+  },
+};
+
+const handleRequest = async (request) => {
+  const url = new URL(request.url);
+  url.host = domain;
+
+  const modifiedRequest = new Request(url.toString(), {
+    headers: request.headers,
+    method: request.method,
+    body: request.body,
+    redirect: "follow",
+  });
+  const response = await fetch(modifiedRequest);
+
+  return new Response(response.body, response);
+};
+
+const handleWebSocket = async (request) => {
+  const upgradeHeader = request.headers.get("Upgrade");
+  if (upgradeHeader !== "websocket") {
+    return new Response("Expected WebSocket", { status: 400 });
+  }
+
+  const webSocket = new WebSocket(`wss://${domain}/ws`);
+  webSocket.addEventListener("message", (event) => {
+    server.send(event.data);
+  });
+
+  const [client, server] = Object.values(new WebSocketPair());
+  server.accept();
+  server.addEventListener("message", (event) => {
+    webSocket.send(event.data);
+  });
+
+  return new Response(null, { status: 101, webSocket: client });
+};
+```
+
+</details>
+
+然后在 Cloudflare Pages 创建页面中点击 `上传资产` 按钮将所有文件上传
 
 ## 自定义
 
