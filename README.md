@@ -63,7 +63,26 @@
 
 #### Nginx
 
-暂无
+```
+location /api/ {
+    proxy_pass http://localhost:8008;
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+}
+
+location /ws {
+    proxy_pass http://localhost:8008;
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection "upgrade";
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+}
+```
 
 #### Caddy
 
@@ -71,15 +90,15 @@
 
 ```
 example.com {
-  root * /var/www/nezha-theme-world-map
-  encode zstd gzip
-  file_server
+    root * /var/www/nezha-theme-world-map
+    encode zstd gzip
+    file_server
 
-  @path {
-    path /api/* /ws
-  }
+    @path {
+        path /api/* /ws
+    }
 
-  reverse_proxy @path localhost:8008
+    reverse_proxy @path localhost:8008
 }
 ```
 
@@ -87,18 +106,18 @@ example.com {
 
 ```
 example.com {
-  root * /var/www/nezha-theme-world-map
-  encode zstd gzip
-  file_server
+    root * /var/www/nezha-theme-world-map
+    encode zstd gzip
+    file_server
 
-  @path {
-    path /api/* /ws
-  }
+    @path {
+        path /api/* /ws
+    }
 
-  reverse_proxy @path https://foobar.com {
-    header_up Host {upstream_hostport}
-    header_up -Origin
-  }
+    reverse_proxy @path https://foobar.com {
+        header_up Host {upstream_hostport}
+        header_up -Origin
+    }
 }
 ```
 
