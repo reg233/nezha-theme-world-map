@@ -185,34 +185,82 @@ body::before {
   color: var(--primary-color);
 }
 
-@media only screen and (max-width: 575px) {
+@media only screen and (max-width: 701px) {
+  .ant-collapse,
+  .tabs {
+    padding: 16px;
+  }
+
   .card {
     width: 100%;
   }
 }
 
-@media only screen and (max-width: 767px) {
+@media only screen and (min-width: 702px) {
   .ant-collapse {
-    padding: 16px;
+    margin: auto;
+    max-width: 680px;
+    padding: 64px 16px 16px;
   }
 
   .tabs {
-    padding: 0 16px 16px;
+    margin: auto;
+    max-width: 680px;
+    padding: 0 16px 64px;
   }
 }
 
-@media only screen and (min-width: 768px) {
-  .ant-collapse {
-    padding: 4% 8% 16px;
-  }
-
+@media only screen and (min-width: 1018px) {
+  .ant-collapse,
   .tabs {
-    padding: 0 8% 4%;
+    max-width: 996px;
+  }
+}
+
+@media only screen and (min-width: 1334px) {
+  .ant-collapse,
+  .tabs {
+    max-width: 1312px;
+  }
+}
+
+@media only screen and (min-width: 1650px) {
+  .ant-collapse,
+  .tabs {
+    max-width: 1628px;
+  }
+}
+
+@media only screen and (min-width: 1966px) {
+  .ant-collapse,
+  .tabs {
+    max-width: 1944px;
   }
 }
 
 @media not screen and (hover: none) and (pointer: coarse) {
-  #root {
+  html {
     overflow: auto;
+  }
+
+  body,
+  .ant-modal-wrap {
+    overflow: auto;
+    scrollbar-color: rgba(0, 0, 0, 0.33) transparent;
+    scrollbar-gutter: stable both-edges;
+    scrollbar-width: thin;
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.33);
+    border-radius: 4px;
   }
 }
