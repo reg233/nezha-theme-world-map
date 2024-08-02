@@ -186,9 +186,12 @@ body::before {
 }
 
 @media only screen and (max-width: 701px) {
-  .ant-collapse,
-  .tabs {
+  .ant-collapse {
     padding: 16px;
+  }
+
+  .tabs {
+    padding: 0 16px 16px;
   }
 
   .card {
@@ -200,13 +203,13 @@ body::before {
   .ant-collapse {
     margin: auto;
     max-width: 680px;
-    padding: 64px 16px 16px;
+    padding: 4% 16px 16px;
   }
 
   .tabs {
     margin: auto;
     max-width: 680px;
-    padding: 0 16px 64px;
+    padding: 0 16px 4%;
   }
 }
 
