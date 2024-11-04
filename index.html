@@ -217,6 +217,17 @@
         margin: 0;
       }
 
+      body::before {
+        background: url("https://imgapi.cn/bing.php") center / cover no-repeat;
+        bottom: 0;
+        content: "";
+        left: 0;
+        position: fixed;
+        right: 0;
+        top: 0;
+        z-index: -1;
+      }
+
       .loader-container {
         align-items: center;
         display: flex;

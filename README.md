@@ -195,7 +195,7 @@ const handleWebSocket = async (request) => {
 
 ### 修改背景图
 
-在 `assets/index-xxxxxxxx.css` 中搜索 `https://imgapi.cn/bing.php` 并替换
+在 `index.html` 中搜索 `https://imgapi.cn/bing.php` 并替换
 
 ### 隐藏地图
 

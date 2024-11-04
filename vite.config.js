@@ -28,6 +28,10 @@ export default defineConfig({
         target: "http://localhost:23334",
         changeOrigin: true,
       },
+      "/view-password": {
+        target: "http://localhost:23334",
+        changeOrigin: true,
+      },
       "/ws": {
         target: "ws://localhost:23334",
         ws: true,
