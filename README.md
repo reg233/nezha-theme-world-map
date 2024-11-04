@@ -59,12 +59,12 @@
 
 下载 [样式一](https://github.com/reg233/nezha-theme-world-map/releases/latest/download/nezha-theme-world-map.zip) 或 [样式二](https://github.com/reg233/nezha-theme-world-map/releases/latest/download/nezha-theme-world-map-tabs.zip) 到站点的对应目录并解压
 
-在 `Nginx` 或 `Caddy` 的配置文件中反代路径 `/api/*` 和 `/ws` 到哪吒面板地址
+在 `Nginx` 或 `Caddy` 的配置文件中反代路径 `/api/` 、 `/view-password` 、 `/ws` 到哪吒面板地址
 
 #### Nginx
 
 ```
-location /api/ {
+location ~ ^(/api/|/view-password) {
     proxy_pass http://localhost:8008;
     proxy_set_header Host $host;
     proxy_set_header X-Real-IP $remote_addr;
@@ -95,7 +95,7 @@ example.com {
     file_server
 
     @path {
-        path /api/* /ws
+        path /api/* /ws /view-password
     }
 
     reverse_proxy @path localhost:8008
@@ -111,7 +111,7 @@ example.com {
     file_server
 
     @path {
-        path /api/* /ws
+        path /api/* /ws /view-password
     }
 
     reverse_proxy @path https://foobar.com {
@@ -122,6 +122,9 @@ example.com {
 ```
 
 ### Cloudflare Pages
+
+> [!WARNING]
+> 暂不支持密码访问
 
 下载 [样式一](https://github.com/reg233/nezha-theme-world-map/releases/latest/download/nezha-theme-world-map.zip) 或 [样式二](https://github.com/reg233/nezha-theme-world-map/releases/latest/download/nezha-theme-world-map-tabs.zip) 到本地并解压
 
