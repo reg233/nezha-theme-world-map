@@ -213,7 +213,7 @@ const handleWebSocket = async (request) => {
 #### 样式二
 
 ```css
-.ant-collapse{display:none}@media only screen and (max-width:767px){.tabs{padding:16px}}@media only screen and (min-width:768px){.tabs{padding:4% 8%}}
+.ant-collapse{display:none}@media only screen and (max-width:701px){.tabs{padding:16px}}@media only screen and (min-width:702px){.tabs{padding:4% 16px}}
 ```
 
 ## 已知问题
