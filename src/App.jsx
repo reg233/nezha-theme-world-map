@@ -2,6 +2,7 @@ import {
   CaretRightOutlined,
   CopyrightCircleOutlined,
   LoadingOutlined,
+  LockOutlined,
 } from "@ant-design/icons";
 import { useWebSocket } from "ahooks";
 import { ReadyState } from "ahooks/lib/useWebSocket";
@@ -10,6 +11,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Card } from "./Card";
 import { MemoizedCopyright } from "./Copyright";
 import { MemoizedNetwork } from "./Network";
+import { MemoizedPassword } from "./Password";
 import { Tab } from "./Tab";
 import { WorldMap } from "./WorldMap";
 import { transformServer } from "./utils";
@@ -21,6 +23,7 @@ export const App = () => {
 
   const [countries, setCountries] = useState({});
 
+  const passwordRef = useRef();
   const copyrightRef = useRef();
   const networkRef = useRef();
 
@@ -132,18 +135,25 @@ export const App = () => {
       <div className="tabs">
         {!!tabsItems.length && <Tab items={tabsItems} />}
       </div>
-      <FloatButton
-        icon={
-          readyState === ReadyState.Connecting ? (
-            <LoadingOutlined />
-          ) : (
-            <CopyrightCircleOutlined
-              style={{ color: "var(--primary-color)" }}
-            />
-          )
-        }
-        onClick={() => copyrightRef.current.show()}
-      />
+      <FloatButton.Group>
+        {readyState !== ReadyState.Open && (
+          <FloatButton
+            icon={<LockOutlined />}
+            onClick={() => passwordRef.current.show()}
+          />
+        )}
+        <FloatButton
+          icon={
+            readyState === ReadyState.Connecting ? (
+              <LoadingOutlined />
+            ) : (
+              <CopyrightCircleOutlined />
+            )
+          }
+          onClick={() => copyrightRef.current.show()}
+        />
+      </FloatButton.Group>
+      <MemoizedPassword ref={passwordRef} />
       <MemoizedCopyright ref={copyrightRef} />
       <MemoizedNetwork ref={networkRef} />
     </>

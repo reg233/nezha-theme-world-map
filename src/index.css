@@ -1,14 +1,3 @@
-body::before {
-  background: url("https://imgapi.cn/bing.php") center / cover no-repeat;
-  bottom: 0;
-  content: "";
-  left: 0;
-  position: fixed;
-  right: 0;
-  top: 0;
-  z-index: -1;
-}
-
 .ant-collapse-borderless {
   background-color: transparent;
 }
@@ -181,7 +170,7 @@ body::before {
   text-align: end;
 }
 
-.anticon-loading {
+.ant-float-btn-group button:last-child .anticon {
   color: var(--primary-color);
 }
 
