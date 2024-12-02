@@ -65,7 +65,7 @@ export const App = () => {
       const newServer = transformServer(now, server);
 
       const group = groupList.find((group) => {
-        return group.servers.includes(newServer.id);
+        return group.servers && group.servers.includes(newServer.id);
       });
       if (group) {
         newServer.groupId = group.group.id;
