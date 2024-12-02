@@ -4,7 +4,7 @@ import {
   LoadingOutlined,
   LockOutlined,
 } from "@ant-design/icons";
-import { useWebSocket } from "ahooks";
+import { useRequest, useWebSocket } from "ahooks";
 import { ReadyState } from "ahooks/lib/useWebSocket";
 import { Collapse, Flex, FloatButton } from "antd";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -28,17 +28,10 @@ export const App = () => {
   const networkRef = useRef();
 
   const getCountries = async () => {
-    const localCountries = localStorage.getItem("countries");
-    if (localCountries) {
-      setCountries(JSON.parse(localCountries));
-    }
-
     const response = await fetch("/countries.json");
     if (response.status === 200) {
       const json = await response.json();
       setCountries(json);
-
-      localStorage.setItem("countries", JSON.stringify(json));
     }
   };
 
@@ -49,6 +42,13 @@ export const App = () => {
     }, {});
   }, [countries]);
 
+  const { data: { data: groupList = [] } = {} } = useRequest(async () => {
+    const response = await fetch("/api/v1/server-group");
+    if (response.status === 200) {
+      return response.json();
+    }
+  });
+
   const { latestMessage: { data } = {}, readyState } = useWebSocket(
     getSocketUrl(),
     {
@@ -56,27 +56,31 @@ export const App = () => {
     }
   );
 
-  const [tags, items] = useMemo(() => {
-    let newData;
-    if (data) {
-      localStorage.setItem("data", data);
-      newData = data;
-    } else {
-      newData = localStorage.getItem("data") || "{}";
-    }
-    const { now = 0, servers = [] } = JSON.parse(newData);
+  const [groupIds, items] = useMemo(() => {
+    const { now = 0, servers = [] } = JSON.parse(data || "{}");
 
-    const tags = ["WorldMap"];
+    const groupIds = ["WorldMap"];
     const groupedServers = new Map();
     const checkedCountries = new Map();
     for (const server of servers) {
       const newServer = transformServer(now, server);
 
-      const key = newServer.tag || "默认";
+      const group = groupList.find((group) => {
+        return group.servers && group.servers.includes(newServer.id);
+      });
+      if (group) {
+        newServer.groupId = group.group.id;
+        newServer.groupName = group.group.name;
+      } else {
+        newServer.groupId = -1;
+        newServer.groupName = "默认";
+      }
+
+      const key = newServer.groupId;
       if (groupedServers.has(key)) {
         groupedServers.get(key).push(newServer);
       } else {
-        tags.push(key);
+        groupIds.push(key);
         groupedServers.set(key, [newServer]);
       }
 
@@ -102,7 +106,7 @@ export const App = () => {
         key: "WorldMap",
         label: "世界地图",
       },
-      ...Array.from(groupedServers, ([tag, servers]) => ({
+      ...Array.from(groupedServers, ([groupId, servers]) => ({
         children: (
           <Flex gap={16} justify="center" wrap="wrap">
             {servers.map((server) => (
@@ -115,25 +119,27 @@ export const App = () => {
             ))}
           </Flex>
         ),
-        key: tag,
-        label: tag,
+        key: groupId,
+        label: servers[0].groupName,
       })),
     ];
 
-    return [tags, items];
-  }, [data, countries, zhCountries]);
+    return [groupIds, items];
+  }, [data, groupList, countries, zhCountries]);
 
   return (
     <>
       <Collapse
-        activeKey={tags.filter((tag) => !inactiveKey.includes(tag))}
+        activeKey={groupIds.filter((id) => !inactiveKey.includes(id))}
         bordered={false}
         expandIcon={({ isActive }) => (
           <CaretRightOutlined rotate={isActive ? 90 : 0} />
         )}
         items={items}
         onChange={(activeKey) => {
-          setInactiveKey(tags.filter((tag) => !activeKey.includes(tag)));
+          setInactiveKey(
+            groupIds.filter((id) => !activeKey.includes(id.toString()))
+          );
         }}
       />
       <FloatButton.Group>
@@ -163,5 +169,5 @@ export const App = () => {
 
 const getSocketUrl = () => {
   const socketProtocol = window.location.protocol === "https:" ? "wss" : "ws";
-  return `${socketProtocol}://${window.location.host}/ws`;
+  return `${socketProtocol}://${window.location.host}/api/v1/ws/server`;
 };

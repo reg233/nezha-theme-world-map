@@ -2,6 +2,8 @@
 
 哪吒监控主题之世界地图，基于 [Amzayo](https://blog.amzayo.com) 设计的主题进行二次修改
 
+[哪吒监控v0版 README](https://github.com/reg233/nezha-theme-world-map/blob/b3cae3f9978741e778ffee7ed61d73136a28aa6a/README.md)
+
 ## 效果图
 
 ### 样式一
@@ -57,14 +59,14 @@
 
 ### 手动
 
-下载 [样式一](https://github.com/reg233/nezha-theme-world-map/releases/download/v1.2.5/nezha-theme-world-map.zip) 或 [样式二](https://github.com/reg233/nezha-theme-world-map/releases/download/v1.2.5/nezha-theme-world-map-tabs.zip) 到站点的对应目录并解压
+下载 [样式一](https://github.com/reg233/nezha-theme-world-map/releases/latest/download/nezha-theme-world-map.zip) 或 [样式二](https://github.com/reg233/nezha-theme-world-map/releases/latest/download/nezha-theme-world-map-tabs.zip) 到站点的对应目录并解压
 
 在 `Nginx` 或 `Caddy` 的配置文件中反代路径 `/api/` 、 `/view-password` 、 `/ws` 到哪吒面板地址
 
 #### Nginx
 
 ```
-location ~ ^(/api/|/view-password) {
+location /api {
     proxy_pass http://localhost:8008;
     proxy_set_header Host $host;
     proxy_set_header X-Real-IP $remote_addr;
@@ -72,7 +74,7 @@ location ~ ^(/api/|/view-password) {
     proxy_set_header X-Forwarded-Proto $scheme;
 }
 
-location /ws {
+location /api/v1/ws/server {
     proxy_pass http://localhost:8008;
     proxy_http_version 1.1;
     proxy_set_header Upgrade $http_upgrade;
@@ -94,11 +96,7 @@ example.com {
     encode zstd gzip
     file_server
 
-    @path {
-        path /api/* /ws /view-password
-    }
-
-    reverse_proxy @path localhost:8008
+    reverse_proxy /api/* localhost:8008
 }
 ```
 
@@ -110,11 +108,7 @@ example.com {
     encode zstd gzip
     file_server
 
-    @path {
-        path /api/* /ws /view-password
-    }
-
-    reverse_proxy @path https://foobar.com {
+    reverse_proxy /api/* https://foobar.com {
         header_up Host {upstream_hostport}
         header_up -Origin
     }
@@ -126,7 +120,7 @@ example.com {
 > [!WARNING]
 > 暂不支持密码访问
 
-下载 [样式一](https://github.com/reg233/nezha-theme-world-map/releases/download/v1.2.5/nezha-theme-world-map.zip) 或 [样式二](https://github.com/reg233/nezha-theme-world-map/releases/download/v1.2.5/nezha-theme-world-map-tabs.zip) 到本地并解压
+下载 [样式一](https://github.com/reg233/nezha-theme-world-map/releases/latest/download/nezha-theme-world-map.zip) 或 [样式二](https://github.com/reg233/nezha-theme-world-map/releases/latest/download/nezha-theme-world-map-tabs.zip) 到本地并解压
 
 在 `index.html` 旁边创建一个名为 `_worker.js` 的文件，将下面的代码粘贴进去，再修改第 1 行中的域名
 
@@ -140,10 +134,10 @@ const domain = "example.com";
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
-    if (url.pathname.startsWith("/api/")) {
-      return handleRequest(request);
-    } else if (url.pathname.startsWith("/ws")) {
+    if (url.pathname.startsWith("/api/v1/ws/server")) {
       return handleWebSocket(request);
+    } else if (url.pathname.startsWith("/api/")) {
+      return handleRequest(request);
     }
 
     return env.ASSETS.fetch(request);
@@ -171,16 +165,13 @@ const handleWebSocket = async (request) => {
     return new Response("Expected WebSocket", { status: 400 });
   }
 
-  const webSocket = new WebSocket(`wss://${domain}/ws`);
+  const webSocket = new WebSocket(`wss://${domain}/api/v1/ws/server`);
   webSocket.addEventListener("message", (event) => {
     server.send(event.data);
   });
 
   const [client, server] = Object.values(new WebSocketPair());
   server.accept();
-  server.addEventListener("message", (event) => {
-    webSocket.send(event.data);
-  });
 
   return new Response(null, { status: 101, webSocket: client });
 };

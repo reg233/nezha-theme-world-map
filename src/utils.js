@@ -2,44 +2,43 @@ import dayjs from "dayjs";
 
 export const transformServer = (now, server) => {
   let {
-    Host: {
-      Arch: arch = "",
-      BootTime: bootTime = 0,
-      CountryCode: countryCode = "",
-      CPU: cpu = [],
-      DiskTotal: diskTotal = 0,
-      MemTotal: memoryTotal = 0,
-      Platform: platform = "",
-      PlatformVersion: platformVersion = "",
-      SwapTotal: swapTotal = 0,
-      Version: version = "",
-      Virtualization: virtualization = "",
+    country_code: countryCode = "",
+    host: {
+      arch = "",
+      boot_time: bootTime = 0,
+      cpu = [],
+      disk_total: diskTotal = 0,
+      mem_total: memoryTotal = 0,
+      platform = "",
+      platform_version: platformVersion = "",
+      swap_total: swapTotal = 0,
+      version = "",
+      virtualization = "",
     } = {},
-    ID: id = "",
-    LastActive: lastActive = "",
-    Name: name = "",
-    State: {
-      CPU: cpuUsed = 0,
-      DiskUsed: diskUsed = 0,
-      Load1: load1 = 0,
-      Load5: load5 = 0,
-      Load15: load15 = 0,
-      MemUsed: memoryUsed = 0,
-      NetInSpeed: netInSpeed = 0,
-      NetInTransfer: netInTransfer = 0,
-      NetOutSpeed: netOutSpeed = 0,
-      NetOutTransfer: netOutTransfer = 0,
-      ProcessCount: processCount = 0,
-      SwapUsed: swapUsed = 0,
-      TcpConnCount: tcpCount = 0,
-      UdpConnCount: udpCount = 0,
-      Uptime: uptime = 0,
+    id = "",
+    last_active: lastActive = "",
+    name = "",
+    state: {
+      cpu: cpuUsed = 0,
+      disk_used: diskUsed = 0,
+      load_1: load1 = 0,
+      load_5: load5 = 0,
+      load_15: load15 = 0,
+      mem_used: memoryUsed = 0,
+      net_in_speed: netInSpeed = 0,
+      net_in_transfer: netInTransfer = 0,
+      net_out_speed: netOutSpeed = 0,
+      net_out_transfer: netOutTransfer = 0,
+      process_count: processCount = 0,
+      swap_used: swapUsed = 0,
+      tcp_conn_count: tcpCount = 0,
+      udp_conn_count: udpCount = 0,
+      uptime = 0,
     } = {},
-    Tag: tag = "",
   } = server;
 
   let live = false;
-  if (server.Host) {
+  if (server.host) {
     live = now - new Date(lastActive).getTime() < 10 * 1000;
   }
 
@@ -75,7 +74,6 @@ export const transformServer = (now, server) => {
     swapPercent: getPercent(swapUsed, swapTotal),
     swapTotal: formatBytes(swapTotal),
     swapUsed: formatBytes(swapUsed),
-    tag,
     uptime: formatUptime(uptime),
     version,
   };
