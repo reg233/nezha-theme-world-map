@@ -57,7 +57,7 @@
 
 ### 手动
 
-下载 [样式一](https://github.com/reg233/nezha-theme-world-map/releases/latest/download/nezha-theme-world-map.zip) 或 [样式二](https://github.com/reg233/nezha-theme-world-map/releases/latest/download/nezha-theme-world-map-tabs.zip) 到站点的对应目录并解压
+下载 [样式一](https://github.com/reg233/nezha-theme-world-map/releases/download/v1.2.5/nezha-theme-world-map.zip) 或 [样式二](https://github.com/reg233/nezha-theme-world-map/releases/download/v1.2.5/nezha-theme-world-map-tabs.zip) 到站点的对应目录并解压
 
 在 `Nginx` 或 `Caddy` 的配置文件中反代路径 `/api/` 、 `/view-password` 、 `/ws` 到哪吒面板地址
 
@@ -126,7 +126,7 @@ example.com {
 > [!WARNING]
 > 暂不支持密码访问
 
-下载 [样式一](https://github.com/reg233/nezha-theme-world-map/releases/latest/download/nezha-theme-world-map.zip) 或 [样式二](https://github.com/reg233/nezha-theme-world-map/releases/latest/download/nezha-theme-world-map-tabs.zip) 到本地并解压
+下载 [样式一](https://github.com/reg233/nezha-theme-world-map/releases/download/v1.2.5/nezha-theme-world-map.zip) 或 [样式二](https://github.com/reg233/nezha-theme-world-map/releases/download/v1.2.5/nezha-theme-world-map-tabs.zip) 到本地并解压
 
 在 `index.html` 旁边创建一个名为 `_worker.js` 的文件，将下面的代码粘贴进去，再修改第 1 行中的域名
 
