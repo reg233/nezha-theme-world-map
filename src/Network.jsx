@@ -48,7 +48,7 @@ const Network = forwardRef(function Network(_, ref) {
 
   const { loading } = useRequest(
     async () => {
-      const response = await fetch(`/api/v1/monitor/${id}`);
+      const response = await fetch(`/api/v1/service/${id}`);
       if (response.status === 200) {
         return response.json();
       }
@@ -56,15 +56,12 @@ const Network = forwardRef(function Network(_, ref) {
     {
       ready: !!id,
       onSuccess: (data) => {
-        let { result } = data || {};
-        if (!result) {
-          result = [];
-        }
+        let { data: monitors = [] } = data || {};
 
         let series = [];
         let legendData = [];
 
-        for (const monitor of result) {
+        for (const monitor of monitors) {
           let loss = 0;
           let seriesData = [];
           let markLineData = [];

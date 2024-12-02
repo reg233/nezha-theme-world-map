@@ -4,7 +4,7 @@ import {
   LoadingOutlined,
   LockOutlined,
 } from "@ant-design/icons";
-import { useWebSocket } from "ahooks";
+import { useRequest, useWebSocket } from "ahooks";
 import { ReadyState } from "ahooks/lib/useWebSocket";
 import { Collapse, Flex, FloatButton } from "antd";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -28,17 +28,10 @@ export const App = () => {
   const networkRef = useRef();
 
   const getCountries = async () => {
-    const localCountries = localStorage.getItem("countries");
-    if (localCountries) {
-      setCountries(JSON.parse(localCountries));
-    }
-
     const response = await fetch("/countries.json");
     if (response.status === 200) {
       const json = await response.json();
       setCountries(json);
-
-      localStorage.setItem("countries", JSON.stringify(json));
     }
   };
 
@@ -49,6 +42,13 @@ export const App = () => {
     }, {});
   }, [countries]);
 
+  const { data: { data: groupList = [] } = {} } = useRequest(async () => {
+    const response = await fetch("/api/v1/server-group");
+    if (response.status === 200) {
+      return response.json();
+    }
+  });
+
   const { latestMessage: { data } = {}, readyState } = useWebSocket(
     getSocketUrl(),
     {
@@ -57,21 +57,25 @@ export const App = () => {
   );
 
   const [items, tabsItems] = useMemo(() => {
-    let newData;
-    if (data) {
-      localStorage.setItem("data", data);
-      newData = data;
-    } else {
-      newData = localStorage.getItem("data") || "{}";
-    }
-    const { now = 0, servers = [] } = JSON.parse(newData);
+    const { now = 0, servers = [] } = JSON.parse(data || "{}");
 
     const groupedServers = new Map();
     const checkedCountries = new Map();
     for (const server of servers) {
       const newServer = transformServer(now, server);
 
-      const key = newServer.tag || "默认";
+      const group = groupList.find((group) => {
+        return group.servers.includes(newServer.id);
+      });
+      if (group) {
+        newServer.groupId = group.group.id;
+        newServer.groupName = group.group.name;
+      } else {
+        newServer.groupId = -1;
+        newServer.groupName = "默认";
+      }
+
+      const key = newServer.groupId;
       if (groupedServers.has(key)) {
         groupedServers.get(key).push(newServer);
       } else {
@@ -102,7 +106,7 @@ export const App = () => {
       },
     ];
 
-    const tabsItems = Array.from(groupedServers, ([tag, servers]) => ({
+    const tabsItems = Array.from(groupedServers, ([groupId, servers]) => ({
       children: (
         <Flex gap={16} justify="center" wrap="wrap">
           {servers.map((server) => (
@@ -115,12 +119,12 @@ export const App = () => {
           ))}
         </Flex>
       ),
-      key: tag,
-      label: tag,
+      key: groupId,
+      label: servers[0].groupName,
     }));
 
     return [items, tabsItems];
-  }, [data, countries, zhCountries]);
+  }, [data, groupList, countries, zhCountries]);
 
   return (
     <>
@@ -162,5 +166,5 @@ export const App = () => {
 
 const getSocketUrl = () => {
   const socketProtocol = window.location.protocol === "https:" ? "wss" : "ws";
-  return `${socketProtocol}://${window.location.host}/ws`;
+  return `${socketProtocol}://${window.location.host}/api/v1/ws/server`;
 };

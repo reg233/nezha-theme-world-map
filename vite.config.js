@@ -24,6 +24,10 @@ export default defineConfig({
   server: {
     open: true,
     proxy: {
+      "/api/v1/ws/server": {
+        target: "http://localhost:23334",
+        ws: true,
+      },
       "/api": {
         target: "http://localhost:23334",
         changeOrigin: true,
@@ -31,10 +35,6 @@ export default defineConfig({
       "/view-password": {
         target: "http://localhost:23334",
         changeOrigin: true,
-      },
-      "/ws": {
-        target: "ws://localhost:23334",
-        ws: true,
       },
     },
   },
